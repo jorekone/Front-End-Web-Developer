@@ -1,0 +1,128 @@
+/* Header. */
+
+body {
+  font-family: fantasy;
+  background-color: #faebd7;
+  font-size: 16px;
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  width:100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 12px;
+}
+
+.header__logo {
+  height: 72px;
+  vertical-align: top;
+}
+
+.header__title {
+  font-size: 1.2em;
+  margin-left: 0;
+  display: inline-block;
+  text-align: right;
+  width: -webkit-fill-available;
+
+}
+
+/* Body section */
+
+.nav__item {
+    box-sizing: border-box;
+    line-height: 24px;
+    padding: 10px;
+    text-transform: uppercase;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #800080;
+  padding: 1.5em;
+  text-align: center;
+}
+
+.nav a:hover {
+  text-decoration: underline;
+}
+
+.block {
+  display: block;
+  text-align: center;
+}
+
+.background {
+  position: relative;
+  width: 100%;
+  min-height: 500px;
+  background-size: cover;
+  background-image: url("../img/river-background.jpg");
+}
+
+.description {
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.75);
+  box-sizing: border-box;
+  position: absolute;
+  padding: 1em;
+  text-align: left;
+}
+
+.work__tittle {
+  position: relative;
+  width: 100%;
+  min-height: 50px;
+  order: 0;
+  padding-left: 12px;
+  margin-top: auto;
+  margin-bottom: auto;
+  background-color: #808080;
+}
+
+#drawer {
+  background-color: #daa520;
+}
+.work__one {
+  background-color: #f0e68c;
+}
+
+.work__two {
+  background-color: #deb887;
+}
+
+.work__three {
+  background-color: #ff7f50;
+}
+
+.work__one,
+.work__two,
+.work__three {
+  position: relative;
+  width: 100%;
+}
+.work__one__image,
+.work__two__image,
+.work__three__image {
+  position: relative;
+  width: 100%;
+  min-height: 200px;
+  background-size: cover;
+}
+
+.work__one__image {
+  background-image: url("../img/introduction-hand.jpg");
+  order: 1;
+}
+
+.work__two__image {
+  background-image: url("../img/skills.jpg");
+  order: 2;
+}
+
+.work__three__image {
+  background-image: url("../img/work.jpg");
+  order: 3;
+}

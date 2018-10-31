@@ -18,9 +18,11 @@ let original_deck = [
     'bicycle'
 ];
 
-let fragment;
 let open_cards_array = [];
 let moves = 0;
+let time = 0;
+let timerId;
+let clockOff = true;
 
 const deck_of_cards = document.querySelector('.deck');
 const restart_button = document.querySelector('.restart');
@@ -28,13 +30,19 @@ const restart_button = document.querySelector('.restart');
 reset_game();
 
 function reset_game() {
+    stopTimer();
+    time = 0;
+    clockOff = true;
+    document.querySelector('.timer').innerHTML = `0:00`;
+
     open_cards_array = [];
-    
-    deck_array = shuffle(original_deck);    
-    fragment = document.createDocumentFragment();
-    
     moves = 0;
     document.querySelector('.moves').textContent = `${moves}`;
+    deck_array = shuffle(original_deck);    
+
+    
+
+    let fragment = document.createDocumentFragment();
 
     for (let i = 0; i < deck_array.length; i++) {
         const card_li = document.createElement('li');
@@ -88,7 +96,10 @@ restart_button.addEventListener('click', function(evt) {
 });
 
 
+
+
 deck_of_cards.addEventListener('click', function(evt) {
+    // deck_of_cards.setAttribute("style", "display: none;");
     if (evt.target.className == 'card') {
         const card = evt.target;
         
@@ -97,6 +108,11 @@ deck_of_cards.addEventListener('click', function(evt) {
         setTimeout(function() {
             check_if_cards_do_not_match();
         }, 2000);
+
+        if (clockOff) {
+            startTimer();
+            clockOff = false;
+        }
     }
 });
 
@@ -106,18 +122,22 @@ function add_card_to_list_of_open_cards(card) {
         open_cards_array.push(card); 
 
         check_if_cards_match();
-        increment_move_counter();   
+        
     }
 }
 
 function check_if_cards_match() {
     if (open_cards_array.length >= 2) {
+        increment_move_counter();   
         if (open_cards_array[0].querySelector('i').className == open_cards_array[1].querySelector('i').className) {
             for (let i=0; i < open_cards_array.length; i++) {
                 open_cards_array[i].className = "card match";
             }
             if (do_all_cards_match()) {
-                console.log(`All cards MATCHED IN JUST ${moves} MOVES`)
+                stopTimer();
+                clockOff = true
+                console.log(`All cards MATCHED IN JUST ${moves} MOVES`);
+
             }
             do_all_cards_match();
         }
@@ -149,6 +169,30 @@ function  do_all_cards_match() {
             break;
         }
     }
-
     return all_matched;
+}
+
+
+function startTimer() {
+    timerId = setInterval(() => {
+        time++;
+        displayTimer();
+    }, 1000);
+}
+
+function displayTimer () {
+    const timer = document.querySelector('.timer');
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+
+    if (seconds < 10) {
+        timer.innerHTML = `${minutes}:0${seconds}`;
+    } else {
+        timer.innerHTML = `${minutes}:${seconds}`;
+    }
+    
+}
+
+function stopTimer() {
+    clearInterval(timerId);
 }

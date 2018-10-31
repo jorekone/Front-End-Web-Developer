@@ -135,7 +135,6 @@ function check_if_cards_match() {
             }
             if (do_all_cards_match()) {
                 stopTimer();
-                clockOff = true
                 console.log(`All cards MATCHED IN JUST ${moves} MOVES`);
 
             }

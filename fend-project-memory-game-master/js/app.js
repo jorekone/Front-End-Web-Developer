@@ -1,20 +1,20 @@
 // Create a list that holds all of your cards
 let original_deck = [
-    'diamond', 
-    'paper-plane-o', 
-    'anchor', 
-    'bolt', 
-    'cube', 
-    'bomb', 
-    'leaf', 
-    'bicycle', 
-    'diamond', 
-    'paper-plane-o', 
-    'anchor', 
-    'bolt', 
-    'cube', 
-    'bomb', 
-    'leaf', 
+    'diamond',
+    'paper-plane-o',
+    'anchor',
+    'bolt',
+    'cube',
+    'bomb',
+    'leaf',
+    'bicycle',
+    'diamond',
+    'paper-plane-o',
+    'anchor',
+    'bolt',
+    'cube',
+    'bomb',
+    'leaf',
     'bicycle'
 ];
 
@@ -25,7 +25,8 @@ let timerId;
 let clockOff = true;
 
 const deck_of_cards = document.querySelector('.deck');
-const restart_button = document.querySelector('.restart');
+const restart_icon = document.querySelector('.restart');
+let restart_button = document.querySelector('.button');
 
 reset_game();
 
@@ -33,14 +34,13 @@ function reset_game() {
     stopTimer();
     time = 0;
     clockOff = true;
+    document.querySelector('.deck').setAttribute("style", "display: '';");
     document.querySelector('.timer').innerHTML = `0:00`;
 
     open_cards_array = [];
     moves = 0;
     document.querySelector('.moves').textContent = `${moves}`;
-    deck_array = shuffle(original_deck);    
-
-    
+    deck_array = shuffle(original_deck);
 
     let fragment = document.createDocumentFragment();
 
@@ -54,7 +54,15 @@ function reset_game() {
         card_li.appendChild(card_i);
         fragment.appendChild(card_li);
     }
+    div_winner = document.querySelector('.winner_state');
+    if (div_winner != null) {
+      div_winner.remove();
+    }
 
+    restart_button.setAttribute("style", "display: none;");
+    document.querySelector('.score-panel').setAttribute("style", "display: '';")
+
+    restore_stars();
     remove_deck();
     deck_of_cards.appendChild(fragment);
 }
@@ -78,31 +86,24 @@ function remove_deck() {
     deck_of_cards.innerHTML ='';
 }
 
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
-
-restart_button.addEventListener('click', function(evt) {
+// EVENT - Restart button
+restart_icon.addEventListener('click', function(evt) {
     if (evt.target.className == 'restart' || evt.target.className == 'fa fa-repeat') {
         reset_game();
     }
 });
 
+restart_button.addEventListener('pointerdown', function(evt) {
+  if (evt.target.className == 'button') {
+    reset_game();
+  }
+})
 
-
-
+// EVENT - Click on card
 deck_of_cards.addEventListener('click', function(evt) {
-    // deck_of_cards.setAttribute("style", "display: none;");
     if (evt.target.className == 'card') {
         const card = evt.target;
-        
+
         add_card_to_list_of_open_cards(card);
 
         setTimeout(function() {
@@ -119,43 +120,29 @@ deck_of_cards.addEventListener('click', function(evt) {
 function add_card_to_list_of_open_cards(card) {
     if (open_cards_array.length < 2) {
         card.classList.add("open", "show");
-        open_cards_array.push(card); 
+        open_cards_array.push(card);
 
         check_if_cards_match();
-        
+
     }
 }
-
+// Check if cards match
 function check_if_cards_match() {
     if (open_cards_array.length >= 2) {
-        increment_move_counter();   
+        increment_move_counter();
         if (open_cards_array[0].querySelector('i').className == open_cards_array[1].querySelector('i').className) {
             for (let i=0; i < open_cards_array.length; i++) {
                 open_cards_array[i].className = "card match";
             }
+
             if (do_all_cards_match()) {
                 stopTimer();
                 console.log(`All cards MATCHED IN JUST ${moves} MOVES`);
-
-            }
-            do_all_cards_match();
+                deck_of_cards.setAttribute("style", "display: none;");
+                winTheGame();
+              }
         }
     }
-
-} 
-
-function check_if_cards_do_not_match() {
-    if (open_cards_array.length >= 2) {
-        for (let i=0; i < open_cards_array.length; i++) {
-            open_cards_array[i].classList.remove("open", "show");
-        }
-        open_cards_array = [];
-    }
-}
-
-function increment_move_counter() {
-    moves += 1; 
-    document.querySelector('.moves').textContent = `${moves}`;
 }
 
 function  do_all_cards_match() {
@@ -171,13 +158,59 @@ function  do_all_cards_match() {
     return all_matched;
 }
 
+function check_if_cards_do_not_match() {
+    if (open_cards_array.length >= 2) {
+        for (let i=0; i < open_cards_array.length; i++) {
+            open_cards_array[i].classList.remove("open", "show");
+        }
+        open_cards_array = [];
+    }
+}
 
+// Increase move counter
+function increment_move_counter() {
+    moves += 1;
+    document.querySelector('.moves').textContent = `${moves} Moves`;
+    calculate_stars();
+}
+
+// Calculate stars
+function calculate_stars() {
+  if (moves == 11 || moves == 14 || moves == 20) {
+    document.querySelector('.fa.fa-star').remove();
+  }
+}
+
+// Restore stars
+function restore_stars() {
+  // let fragment = document.createDocumentFragment();
+  let star_count = document.getElementsByClassName('fa fa-star').length;
+  const stars = document.querySelector('.stars');
+
+  while (star_count < 3) {
+    const li = document.createElement('li');
+    const i = document.createElement('i');
+
+    i.className = 'fa fa-star';
+    li.appendChild(i);
+    // fragment.appendChild(li);
+    stars.appendChild(li);
+
+    star_count++;
+  }
+}
+
+// Timer functions
 function startTimer() {
     timerId = setInterval(() => {
         time++;
         displayTimer();
     }, 1000);
 }
+
+function stopTimer() {
+    clearInterval(timerId);
+  }
 
 function displayTimer () {
     const timer = document.querySelector('.timer');
@@ -188,10 +221,41 @@ function displayTimer () {
         timer.innerHTML = `${minutes}:0${seconds}`;
     } else {
         timer.innerHTML = `${minutes}:${seconds}`;
-    }
-    
-}
+        }
+      }
 
-function stopTimer() {
-    clearInterval(timerId);
+function winTheGame() {
+  document.querySelector('.deck').setAttribute("style", "display: none;")
+  document.querySelector('.score-panel').setAttribute("style", "display: none;")
+  let star_count = document.getElementsByClassName("fa fa-star").length;
+  let time_count = document.querySelector(".timer").innerText;
+  let move_count = document.querySelector(".moves").innerText;
+
+  let div_winner = document.createElement('div');
+  let h1_congratulations_message = document.createElement('h1');
+  let h3_score_moves_stars_message = document.createElement('h3');
+  let h3_time_message = document.createElement('h3');
+  // let button = document.createElement('div');
+
+  div_winner.className = 'winner_state';
+  h1_congratulations_message.className = 'congratulations';
+  h3_score_moves_stars_message.className = 'score_moves_stars';
+  h3_time_message.className = 'score_time';
+  // button.className = 'button';
+
+  h1_congratulations_message.textContent = `Congratulations! You won!`;
+  h3_score_moves_stars_message.textContent = `With ${move_count} moves and ${star_count} stars.`;
+  h3_time_message.textContent = `In just ${time_count}`;
+  // button.textContent = `Play again`;
+
+  div_winner.appendChild(h1_congratulations_message);
+  div_winner.appendChild(h3_score_moves_stars_message);
+  div_winner.appendChild(h3_time_message);
+  div_winner.appendChild(restart_button);
+
+  restart_button.setAttribute("style", "display: '';");
+
+  div_winner.setAttribute("style", "background: mediumpurple;")
+
+  document.body.appendChild(div_winner);
 }

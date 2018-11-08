@@ -1,20 +1,17 @@
-# Memory Game Project
+# Memory Game
 
-## Table of Contents
+## Installation
 
-* [Instructions](#instructions)
-* [Contributing](#contributing)
+Clone the GitHub repository
 
-## Instructions
+```
+$ git clone https://GitHub.com/...
+```
 
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+## Introduction
 
-To get started, open `js/app.js` and start building out the app's functionality
-
-For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
+This project is just and interactive memory game. You can get scores based on time, moves and stars. The game can be reset at any point and when the user finishes there is wining screen showing the score
 
 ## Contributing
 
-This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
-
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+This repository contains the starter code for _all_ Udacity students.

@@ -82,17 +82,19 @@ function shuffle(array) {
     return array;
 }
 
+// Removes the deck of cards
 function remove_deck() {
     deck_of_cards.innerHTML ='';
 }
 
-// EVENT - Restart button
+// EVENT - Restart icon
 restart_icon.addEventListener('click', function(evt) {
     if (evt.target.className == 'restart' || evt.target.className == 'fa fa-repeat') {
         reset_game();
     }
 });
 
+// EVENT - Restart button
 restart_button.addEventListener('pointerdown', function(evt) {
   if (evt.target.className == 'button') {
     reset_game();
@@ -123,9 +125,9 @@ function add_card_to_list_of_open_cards(card) {
         open_cards_array.push(card);
 
         check_if_cards_match();
-
+      }
     }
-}
+
 // Check if cards match
 function check_if_cards_match() {
     if (open_cards_array.length >= 2) {
@@ -134,7 +136,7 @@ function check_if_cards_match() {
             for (let i=0; i < open_cards_array.length; i++) {
                 open_cards_array[i].className = "card match";
             }
-
+            // if the player wins the game
             if (do_all_cards_match()) {
                 stopTimer();
                 console.log(`All cards MATCHED IN JUST ${moves} MOVES`);
@@ -176,14 +178,13 @@ function increment_move_counter() {
 
 // Calculate stars
 function calculate_stars() {
-  if (moves == 11 || moves == 14 || moves == 20) {
+  if (moves == 12 || moves == 16 || moves == 20) {
     document.querySelector('.fa.fa-star').remove();
   }
 }
 
 // Restore stars
 function restore_stars() {
-  // let fragment = document.createDocumentFragment();
   let star_count = document.getElementsByClassName('fa fa-star').length;
   const stars = document.querySelector('.stars');
 
@@ -193,7 +194,6 @@ function restore_stars() {
 
     i.className = 'fa fa-star';
     li.appendChild(i);
-    // fragment.appendChild(li);
     stars.appendChild(li);
 
     star_count++;
@@ -224,6 +224,7 @@ function displayTimer () {
         }
       }
 
+// This function creates the winning window and hides the deck and the score panel
 function winTheGame() {
   document.querySelector('.deck').setAttribute("style", "display: none;")
   document.querySelector('.score-panel').setAttribute("style", "display: none;")
